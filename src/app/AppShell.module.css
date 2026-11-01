@@ -1,0 +1,214 @@
+/* Sidebar mengikuti Figma Desktop - 1 (node 51:58): logo bulat + nama, menu ikon 35 px
+   dengan teks 20 px, garis pemisah vertikal di kanan, akun di bawah. */
+
+.shell {
+  min-height: 100%;
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+}
+
+.skip {
+  position: absolute;
+  left: var(--space-4);
+  top: -100px;
+  z-index: 100;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+}
+
+.skip:focus {
+  top: var(--space-4);
+}
+
+.topbar {
+  display: none;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-7) var(--space-5) var(--space-5);
+  border-right: 1px solid var(--color-border);
+  background: var(--color-bg);
+  overflow-y: auto;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: clamp(var(--space-6), 12vh, 140px);
+}
+
+.logo {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.brandName {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-tight);
+}
+
+.closeButton {
+  display: none;
+}
+
+.nav {
+  flex: 1;
+}
+
+.nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(var(--space-3), 6vh, 72px);
+}
+
+.navLink {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: var(--fs-md);
+  transition: background var(--duration);
+}
+
+.navLink:hover {
+  background: var(--color-surface-soft);
+}
+
+.navLinkActive {
+  font-weight: var(--fw-semibold);
+}
+
+/* Penanda aktif: garis vertikal di tepi kanan sidebar, seperti "Line 2" di Figma. */
+.navLinkActive::after {
+  content: "";
+  position: absolute;
+  right: calc(-1 * var(--space-5) - 1px);
+  top: 50%;
+  translate: 0 -50%;
+  width: 4px;
+  height: 50px;
+  border-radius: 4px 0 0 4px;
+  background: var(--color-text);
+}
+
+.account {
+  margin-top: var(--space-6);
+}
+
+.main {
+  min-width: 0;
+  padding: var(--space-6) clamp(var(--space-4), 3vw, var(--space-7)) var(--space-7);
+  outline: none;
+}
+
+.context {
+  margin-bottom: var(--space-5);
+}
+
+.scrim {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: var(--space-3) max(var(--space-4), env(safe-area-inset-right, 0px)) var(--space-3)
+      max(var(--space-4), env(safe-area-inset-left, 0px));
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .topbarBrand {
+    font-weight: var(--fw-semibold);
+  }
+
+  .menuButton,
+  .closeButton {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+  }
+
+  .closeButton {
+    margin-left: auto;
+  }
+
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 40;
+    width: min(300px, 85vw);
+    padding: var(--space-5);
+    transform: translateX(-100%);
+    transition: transform var(--duration) ease;
+    box-shadow: var(--shadow-pop);
+  }
+
+  .sidebarOpen {
+    transform: none;
+  }
+
+  .brand {
+    margin-bottom: var(--space-6);
+  }
+
+  .nav ul {
+    gap: var(--space-2);
+  }
+
+  .navLinkActive {
+    background: var(--color-surface);
+  }
+
+  .navLinkActive::after {
+    display: none;
+  }
+
+  .scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    background: var(--color-overlay);
+  }
+
+  .main {
+    padding: var(--space-5) max(var(--space-4), env(safe-area-inset-right, 0px)) var(--space-6)
+      max(var(--space-4), env(safe-area-inset-left, 0px));
+  }
+}

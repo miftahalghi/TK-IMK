@@ -1,0 +1,25 @@
+.page {
+  display: grid;
+  gap: var(--space-5);
+  max-width: var(--content-max);
+}
+
+.check {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-card);
+  background: var(--color-warning-soft);
+  border: 1px solid var(--cat-tidak-sehat);
+  font-size: var(--fs-sm);
+}
+
+.banner svg {
+  flex: none;
+}

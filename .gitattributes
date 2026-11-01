@@ -1,0 +1,6 @@
+# Samakan akhir baris (LF) untuk semua anggota, termasuk pengguna Windows.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary

@@ -1,0 +1,10 @@
+.page {
+  display: grid;
+  gap: var(--space-5);
+  max-width: var(--content-max);
+}
+
+.check {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}

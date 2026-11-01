@@ -1,0 +1,31 @@
+/* Figma: kolom kiri 310 px (dua kartu bertumpuk), kolom kanan 340 px (satu kartu tinggi). */
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 31fr) minmax(0, 34fr);
+  grid-template-areas:
+    "health  regions"
+    "pollut  regions";
+  gap: var(--space-5) var(--space-6);
+}
+
+.health {
+  grid-area: health;
+}
+
+.pollutants {
+  grid-area: pollut;
+}
+
+.regions {
+  grid-area: regions;
+}
+
+@media (max-width: 720px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "health"
+      "pollut"
+      "regions";
+  }
+}

@@ -1,0 +1,66 @@
+/* Grid dashboard: kolom tengah (Figma 680 px) + panel kanan (Figma ±294 px).
+   ≥ 1200 px: dua kolom. < 1200 px: panel kanan turun ke bawah. */
+
+.page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--aside-width);
+  grid-template-areas:
+    "alert  alert"
+    "top    aside"
+    "bottom aside";
+  grid-template-rows: auto auto 1fr;
+  gap: var(--space-5) var(--space-6);
+  max-width: calc(var(--content-max) + var(--aside-width));
+}
+
+.alert {
+  grid-area: alert;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.alert:empty {
+  display: none;
+}
+
+.alertSlot {
+  display: contents;
+}
+
+.top {
+  grid-area: top;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+.bottom {
+  grid-area: bottom;
+  min-width: 0;
+}
+
+.aside {
+  grid-area: aside;
+  min-width: 0;
+  align-self: start;
+  position: sticky;
+  top: var(--space-5);
+}
+
+@media (max-width: 1200px) {
+  .page {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "alert"
+      "top"
+      "aside"
+      "bottom";
+    grid-template-rows: none;
+  }
+
+  .aside {
+    position: static;
+  }
+}

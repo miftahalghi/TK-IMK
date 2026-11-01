@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run verify
+      - name: Cek scope fitur (hanya untuk branch fitur/<id>)
+        if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'fitur/')
+        run: |
+          FEATURE="${GITHUB_HEAD_REF#fitur/}"
+          git fetch origin "${{ github.base_ref }}"
+          git checkout -B "$GITHUB_HEAD_REF"
+          npm run check:scope -- "$FEATURE" "origin/${{ github.base_ref }}"
