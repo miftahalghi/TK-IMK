@@ -3,7 +3,7 @@
 Dashboard kualitas udara (ISPU) dan UV Index untuk pekerja kantoran dan mahasiswa.
 Data: PM2.5, PM10, CO, NO₂, SO₂, UV Index.
 
-Tugas mata kuliah **Interaksi Manusia dan Komputer**. Website dibangun mengikuti 10 heuristik **Nielsen** dan 8 aturan emas **Shneiderman** ([CONTRACT.md §8](CONTRACT.md)).
+Tugas mata kuliah **Interaksi Manusia dan Komputer**. Website dibangun mengikuti 10 heuristik **Nielsen** dan 8 aturan emas **Shneiderman** ([CONTRACT.md](CONTRACT.md)).
 
 ## Mulai
 
