@@ -23,6 +23,15 @@ a.account:hover {
   font-weight: var(--fw-semibold);
 }
 
+.avatarImage {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-mint);
+  object-fit: contain;
+}
+
 .name {
   flex: 1;
   min-width: 0;
@@ -36,11 +45,13 @@ a.account:hover {
   flex: none;
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
 }
 
 .iconButton:hover {
@@ -48,7 +59,169 @@ a.account:hover {
 }
 
 .page {
-  max-width: 560px;
+  width: min(100%, 1040px);
+  margin-inline: auto;
   display: grid;
+  gap: var(--space-6);
+  padding-bottom: var(--space-7);
+}
+
+.loginLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(360px, 1.1fr);
+  align-items: stretch;
   gap: var(--space-5);
+}
+
+.welcomePanel {
+  min-width: 0;
+  padding: clamp(var(--space-5), 4vw, var(--space-7));
+  border-radius: var(--radius-card);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.welcomeIcon {
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--color-on-accent);
+  color: var(--color-accent);
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.welcomePanel h2 {
+  max-width: 12ch;
+  margin: 0;
+  font-size: clamp(var(--fs-xl), 3vw, var(--fs-xxl));
+  line-height: var(--lh-tight);
+}
+
+.welcomeDescription {
+  max-width: 38ch;
+  margin: 0;
+  line-height: var(--lh-normal);
+}
+
+.benefits {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.benefits li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.benefits li::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  flex: none;
+  margin-top: 0.55em;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.loginCard {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-pop);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.passwordField {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.passwordToggle {
+  justify-self: end;
+  min-height: 44px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.signedIn {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.signedInCard {
+  width: min(100%, 600px);
+  margin-inline: auto;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-pop);
+}
+
+.signedIn p {
+  margin: 0;
+}
+
+.formError {
+  margin: 0;
+  color: var(--color-danger);
+}
+
+@media (max-width: 760px) {
+  .loginLayout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .welcomePanel {
+    gap: var(--space-3);
+  }
+
+  .welcomePanel h2 {
+    max-width: 20ch;
+    font-size: var(--fs-xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .page {
+    gap: var(--space-4);
+  }
+
+  .loginLayout {
+    gap: var(--space-4);
+  }
+
+  .welcomePanel {
+    padding: var(--space-5);
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions > * {
+    width: 100%;
+  }
 }

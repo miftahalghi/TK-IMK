@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
-import { Icon, useAuth } from "@shared";
+import { useNavigate } from "react-router-dom";
+import { Icon, useAuth, useToast } from "@shared";
+import profileImage from "./assets/Three_finger_salute_-removebg-preview.png";
 import styles from "./auth.module.css";
 
 /**
@@ -8,6 +10,14 @@ import styles from "./auth.module.css";
  */
 export function AccountSlot() {
   const { user, logout } = useAuth();
+  const { show } = useToast();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    show("Anda telah keluar.");
+    navigate("/", { replace: true });
+  };
 
   if (!user) {
     return (
@@ -23,13 +33,11 @@ export function AccountSlot() {
 
   return (
     <div className={styles.account}>
-      <span className={styles.avatar} aria-hidden="true">
-        {user.name.charAt(0).toUpperCase()}
-      </span>
-      <span className={styles.name} title={user.email}>
+      <img className={styles.avatarImage} src={profileImage} alt={`Foto profil ${user.name}`} />
+      <span className={styles.name} title={user.name}>
         {user.name}
       </span>
-      <button type="button" className={styles.iconButton} onClick={logout} aria-label="Keluar">
+      <button type="button" className={styles.iconButton} onClick={handleLogout} aria-label="Keluar">
         <Icon name="logout" size={22} />
       </button>
     </div>
