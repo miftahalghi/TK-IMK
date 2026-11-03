@@ -33,7 +33,7 @@ Kerangka sudah menyediakan **bar konteks** di atas setiap halaman (lokasi aktif 
 | `src/features/<id-kamu>/**` | **kamu** | membuat, mengubah, menghapus apa saja |
 | `src/features/<id-lain>/**` | anggota lain | ✗ jangan disentuh |
 | `src/features/registry.js` | koordinator | ✗ (fitur kamu sudah terdaftar) |
-| `src/shared/**` | koordinator | hanya **membaca dan memakai** lewat `@shared` |
+| `src/shared/**` | koordinator | hanya **membaca dan memakai** lewat `@shared` (termasuk `src/shared/data/dataset/`) |
 | `src/app/**` | koordinator | ✗ |
 | `package.json`, `package-lock.json`, `vite.config.js`, `eslint.config.js` | koordinator | ✗ |
 | `CONTRACT.md`, `AGENTS.md`, `CLAUDE.md`, `docs/**`, `scripts/**` | koordinator | ✗ |
@@ -103,20 +103,39 @@ Setiap hook mengembalikan `{ status: "loading" | "success" | "error", data, erro
 
 | Hook | `data` | Catatan |
 |---|---|---|
-| `useLocations()` | `Location[]` | 12 lokasi |
+| `useLocations()` | `Location[]` | 9 lokasi (Jabodetabek ber-id `jakarta`) |
 | `useCurrent(locationId)` | `Reading` | juga mengembalikan `assessment` (hasil `assess`) |
 | `useCurrentAll()` | `Reading[]` | satu per lokasi, jam ini |
 | `useHourly(locationId, { hours = 24 })` | `Reading[]` | mulai jam sekarang |
 | `useDaily(locationId, { days = 7 })` | `Reading[]` | mulai hari ini; polutan = rata-rata 24 jam, `uv` = maksimum |
-| `useSourceInfo()` | `{ kind, label, hasForecast, updatedAt }` | `hasForecast` menentukan label "Prakiraan" atau "Riwayat" |
+| `useSourceInfo()` | `{ kind, label, hasForecast, updatedAt, description }` | `hasForecast` menentukan label "Prakiraan" atau "Riwayat". Bar konteks sudah menampilkan sumber data; fitur tidak perlu menampilkannya lagi. |
 
 Fungsi async yang sama tersedia di `dataService` (misalnya `dataService.getCurrent(id)`) untuk kebutuhan di luar render.
+
+### Sumber data
+
+Dipilih koordinator lewat `.env` (`VITE_DATA_SOURCE`). **Kode fitur sama untuk kedua sumber.**
+
+| Sumber | Isi | Dipakai untuk |
+|---|---|---|
+| `mock` (**default**) | Data buatan, mencakup kelima kategori ISPU dan data bolong (Medan) | Mengembangkan dan menguji semua tampilan |
+| `dataset` | Rekaman **Open-Meteo 1 Okt–1 Nov 2026** (`src/shared/data/dataset/`). "Sekarang" = 26 Okt 2026, 12.00 WIB. | Demo, uji usability, screenshot laporan |
+
+Untuk mencoba mode dataset di komputer sendiri: salin `.env.example` menjadi `.env`, isi `VITE_DATA_SOURCE=dataset`, lalu jalankan ulang `npm run dev`. File `.env` tidak ikut di-commit.
+
+**Jangan mengimpor `open-meteo.json` atau file mock dari fitur.** Selalu lewat hooks.
+
+### Daftar lokasi (9)
+
+Jabodetabek (id `jakarta`), Serang, Bandung, Surabaya, Yogyakarta, Denpasar, Medan, Pekanbaru, Ambon.
+Jakarta, Bogor, Depok, dan Bekasi **digabung** karena data Open-Meteo (resolusi puluhan km) bernilai sama untuk keempatnya. Id tetap `jakarta`, jadi tautan dan pengaturan lama tetap berfungsi. Jangan memakai id `bogor`, `depok`, atau `bekasi`.
 
 ### Bentuk data
 
 ```js
 // Location
-{ id: "jakarta", name: "Jakarta", region: "DKI Jakarta", lat: -6.2088, lon: 106.8456 }
+{ id: "jakarta", name: "Jabodetabek", region: "DKI Jakarta, Jawa Barat, Banten", lat: -6.2088, lon: 106.8456,
+  aliases: ["Jakarta", "Bogor", "Depok", "Tangerang", "Bekasi"] }   // aliases opsional, untuk pencarian
 
 // Reading: satu pembacaan (per jam atau rata-rata harian)
 {
@@ -139,12 +158,12 @@ Fungsi async yang sama tersedia di `dataService` (misalnya `dataService.getCurre
 
 ### Menguji state UI
 
-Tambahkan ke alamat di browser (bisa digabung dengan `&lokasi=...`):
+Tambahkan ke alamat di browser (bisa digabung dengan `&lokasi=...`, berlaku untuk kedua sumber data):
 - `?simulasi=lambat`: setiap permintaan ±3 detik (cek skeleton)
 - `?simulasi=gagal`: semua permintaan gagal (cek pesan error + tombol coba lagi)
 - `?simulasi=kosong`: semua nilai null (cek "data tidak tersedia")
 
-Lokasi **Medan** selalu punya PM2.5 dan CO bernilai `null`.
+Lokasi **Medan** di mode `mock` selalu punya PM2.5 dan CO bernilai `null`. Kategori "Berbahaya" hanya muncul 1 jam di dataset asli, jadi ujilah tampilannya di mode `mock` (Pekanbaru).
 
 ## 6. State global
 

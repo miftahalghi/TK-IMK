@@ -6,15 +6,20 @@ import styles from "../shared/components/components.module.css";
 import { useActiveLocation } from "../shared/state/LocationContext.jsx";
 import { useSourceInfo } from "../shared/data/hooks.js";
 import { storage } from "../shared/storage.js";
+import { formatDate, formatTime } from "../shared/format.js";
 
 /**
  * Bar konteks di atas setiap halaman (Nielsen N1, visibilitas status sistem):
- * pengguna selalu tahu lokasi mana yang sedang dilihat dan apakah datanya asli.
+ * pengguna selalu tahu lokasi mana yang sedang dilihat dan dari mana datanya.
+ *   mock     → "Data simulasi"
+ *   dataset  → "Data Open-Meteo per 26 Okt 2026, 12.00 WIB" (bukan data real-time)
  */
 export function ContextBar() {
   const { location, locationId } = useActiveLocation();
   const source = useSourceInfo();
-  const isMock = source.status === "success" && source.data.kind === "mock";
+  const info = source.status === "success" ? source.data : null;
+  const label =
+    info?.kind === "dataset" ? `Data Open-Meteo per ${formatDate(info.updatedAt)}, ${formatTime(info.updatedAt)} WIB` : info?.label;
 
   return (
     <div className={styles.contextBar}>
@@ -25,10 +30,10 @@ export function ContextBar() {
           {location ? `${location.name}, ${location.region}` : locationId}
         </span>
       </span>
-      {isMock && (
+      {info && (
         <span className={styles.sourceBadge}>
-          {source.data.label}
-          <InfoTip term="data-simulasi" learnMore={false} />
+          {label}
+          <InfoTip label="Sumber data" text={info.description} term={info.kind === "mock" ? "data-simulasi" : "sumber-data"} />
         </span>
       )}
     </div>
