@@ -13,7 +13,7 @@ Halaman `/maps` (`MapsPage.jsx`, default export). Menu sidebar "Peta".
 Belum ada desain di Figma, dan **tidak perlu dibuat**. Pakai pola halaman bersama: `PageHeader` di atas, lalu peta dan daftar lokasi berdampingan (bertumpuk di layar sempit). Panel detail memakai `Card`.
 
 ## Yang sudah tersedia (`@shared`)
-- `useCurrentAll()` → pembacaan jam ini untuk 12 lokasi. `useLocations()` → `{ id, name, region, lat, lon }`.
+- `useCurrentAll()` → pembacaan jam ini untuk 9 lokasi. `useLocations()` → `{ id, name, region, lat, lon }`.
 - `assess(reading)` → `{ ispu, category, dominant, pollutants, uv }`.
 - `categoryInfo(category)` → `{ label, colorVar, onColorVar }`. Pakai `var(${info.colorVar})` untuk warna marker.
 - `useActiveLocation()` → `{ locationId, setLocationId }`. `setLocationId(id, { to: "/" })` mengganti lokasi sekaligus membuka Beranda.
@@ -57,8 +57,8 @@ Belum ada desain di Figma, dan **tidak perlu dibuat**. Pakai pola halaman bersam
 | S4 | "Lihat di Beranda" menutup alur dengan jelas (pindah ke Beranda dengan lokasi itu) |
 
 ## Kriteria selesai
-- [ ] 12 marker tampil dengan warna dan angka ISPU yang benar (bandingkan dengan `assess`).
-- [ ] Medan (data bolong) tetap tampil dengan benar.
+- [ ] 9 marker tampil dengan warna dan angka ISPU yang benar (bandingkan dengan `assess`). Marker Jabodetabek mewakili satu wilayah, jadi boleh diberi keterangan "mencakup Jakarta, Bogor, Depok, Bekasi".
+- [ ] Di mode `mock`, Medan (data bolong) tetap tampil dengan benar.
 - [ ] "Lihat di Beranda" membuka `/` dengan lokasi itu aktif, dan Back kembali ke Peta.
 - [ ] Legenda dan atribusi OSM terlihat.
 - [ ] Semua lokasi bisa dipilih dengan keyboard lewat daftar.

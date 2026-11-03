@@ -120,7 +120,13 @@ export function createMockAdapter({ now = () => Date.now(), latency = [200, 600]
   return {
     kind: "mock",
     async getSourceInfo() {
-      return { kind: "mock", label: "Data simulasi", hasForecast: true, updatedAt: toWibIso(hourStart(now())) };
+      return {
+        kind: "mock",
+        label: "Data simulasi",
+        hasForecast: true,
+        updatedAt: toWibIso(hourStart(now())),
+        description: "Angka di situs ini masih data contoh untuk pengembangan, belum hasil pengukuran asli.",
+      };
     },
     async getLocations() {
       await wait();

@@ -1,16 +1,21 @@
 /**
  * Pintu tunggal data. Fitur memanggil fungsi di sini (atau hooks di hooks.js),
- * TIDAK PERNAH memanggil fetch atau mengimpor file mock secara langsung.
+ * TIDAK PERNAH memanggil fetch atau mengimpor file data secara langsung.
  *
- * Mengganti sumber data: set VITE_DATA_SOURCE=real di .env setelah realAdapter
- * dibuat (Fase 2). Komponen fitur tidak perlu berubah.
+ * Sumber data dipilih lewat .env (VITE_DATA_SOURCE). Komponen fitur tidak perlu berubah.
+ *   mock     (default) data buatan: mencakup semua kategori ISPU dan data bolong (Medan),
+ *            dipakai saat mengembangkan dan menguji tampilan.
+ *   dataset  rekaman Open-Meteo 1 Okt–1 Nov 2026 (src/shared/data/dataset/),
+ *            dipakai untuk demo, uji usability, dan screenshot laporan.
+ *            "Sekarang" bisa diatur dengan VITE_DATASET_NOW (lihat datasetAdapter.js).
  *
- * Simulasi untuk menguji state UI (tambahkan ke URL):
+ * Simulasi untuk menguji state UI (tambahkan ke URL, berlaku untuk kedua sumber):
  *   ?simulasi=gagal   → semua permintaan data gagal
  *   ?simulasi=lambat  → setiap permintaan butuh ±3 detik
  *   ?simulasi=kosong  → semua nilai polutan dan UV null
  */
 import { createMockAdapter } from "./mockAdapter.js";
+import { createDatasetAdapter } from "./datasetAdapter.js";
 
 function readSimulation() {
   try {
@@ -22,12 +27,17 @@ function readSimulation() {
 
 function createAdapter() {
   const source = import.meta.env?.VITE_DATA_SOURCE ?? "mock";
-  if (source === "real") {
-    // Fase 2: ganti dengan `createRealAdapter()` dari ./realAdapter.js.
-    console.warn("VITE_DATA_SOURCE=real belum tersedia. Memakai data simulasi.");
+  const slow = readSimulation() === "lambat";
+  if (source === "dataset") {
+    return createDatasetAdapter({
+      now: import.meta.env?.VITE_DATASET_NOW,
+      latency: slow ? [2800, 3200] : [0, 0],
+    });
   }
-  const simulation = readSimulation();
-  return createMockAdapter({ latency: simulation === "lambat" ? [2800, 3200] : [200, 600] });
+  if (source !== "mock") {
+    console.warn(`VITE_DATA_SOURCE="${source}" tidak dikenal. Pilihan: mock, dataset. Memakai mock.`);
+  }
+  return createMockAdapter({ latency: slow ? [2800, 3200] : [200, 600] });
 }
 
 const EMPTY_KEYS = ["pm25", "pm10", "co", "no2", "so2", "uv"];
@@ -56,7 +66,10 @@ function withSimulation(adapter) {
 
 const adapter = withSimulation(createAdapter());
 
-/** @returns {Promise<{kind: string, label: string, hasForecast: boolean, updatedAt: string}>} */
+/**
+ * @returns {Promise<{kind: "mock"|"dataset", label: string, hasForecast: boolean, updatedAt: string,
+ *   description?: string, range?: {start: string, end: string}}>}
+ */
 export const getSourceInfo = () => adapter.getSourceInfo();
 /** @returns {Promise<Location[]>} */
 export const getLocations = () => adapter.getLocations();

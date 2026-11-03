@@ -29,20 +29,20 @@ Ambil gambaran umumnya saja. **Hierarki di Figma tidak dipakai**: di Figma jam "
 
 ### Pencarian
 1. Input dengan ikon search, `<label>` (boleh `visually-hidden`), placeholder "Cari lokasi, misalnya Bandung".
-2. Saran muncul saat mengetik: cocokkan `name` dan `region` tanpa membedakan huruf besar-kecil. Saat input kosong dan fokus, tampilkan semua lokasi. Setiap saran menampilkan nama, wilayah, dan `CategoryPill` kecil.
+2. Saran muncul saat mengetik: cocokkan `name`, `region`, dan `aliases` (jika ada) tanpa membedakan huruf besar-kecil. Contoh: mengetik "Bogor" menemukan Jabodetabek. Saat input kosong dan fokus, tampilkan semua lokasi. Setiap saran menampilkan nama, wilayah, dan `CategoryPill` kecil. Jika yang cocok adalah alias, tampilkan keterangan "mencakup Bogor".
 3. **Pola combobox ARIA:** `role="combobox"`, `aria-expanded`, `aria-controls`, `aria-activedescendant`; daftar `role="listbox"`, item `role="option"`.
 4. Keyboard: ↑/↓ memilih, Enter menetapkan, Esc menutup. Klik di luar juga menutup.
 5. Tidak ada hasil → "Lokasi tidak ditemukan. Coba nama kota lain." beserta daftar lokasi yang tersedia.
 6. Memilih lokasi → `setLocationId(id)`, input dikosongkan, daftar ditutup, fokus kembali ke input.
 7. **Jalan pintas `/`**: menekan `/` di mana pun di Beranda (kecuali saat mengetik di input lain) memfokuskan pencarian. Tampilkan petunjuk kecil di dalam input: "Tekan / untuk mencari".
-8. **Chip lokasi tersimpan** di bawah pencarian (hanya saat login dan `savedLocations` tidak kosong): "Rumah · Depok". Klik chip → `setLocationId`. Chip yang aktif ditandai (`aria-pressed`).
+8. **Chip lokasi tersimpan** di bawah pencarian (hanya saat login dan `savedLocations` tidak kosong): "Rumah · Bandung". Klik chip → `setLocationId`. Chip yang aktif ditandai (`aria-pressed`).
 
 ### Kartu utama (urutan prioritas visual, dari paling menonjol)
 9. **ISPU**: angka besar di kotak berwarna kategori, label "ISPU" dengan `<InfoTip term="ispu" />`, dan nama kategori (teks, bukan hanya warna).
 10. **Tindakan yang disarankan**: `getSummary(assessment)`, ukuran teks besar (≥ `--fs-md`). Ini jawaban untuk "perlu masker?".
 11. **Polutan dominan**: "Polutan dominan: PM2.5 (Partikulat halus)" + `<InfoTip term="polutan-dominan" />`.
 12. **UV Index**: `UvPill` + satu kalimat dari `UV_ADVICE[level]` + `<InfoTip term="uv" />`.
-13. **Lokasi dan waktu**, teks kecil sekunder: ikon pin + "Jakarta, DKI Jakarta", lalu "Diperbarui 12.00 · 22 Okt 2026".
+13. **Lokasi dan waktu**, teks kecil sekunder: ikon pin + "Jabodetabek, DKI Jakarta, Jawa Barat, Banten" (dari `location.name` + `location.region`), lalu "Diperbarui 12.00 · 26 Okt 2026" (dari `reading.time`).
 14. **Legenda**: `<CategoryLegend compact highlight={assessment.category} />` di bawah kartu, supaya arti warna tidak perlu diingat.
 
 ### State
@@ -51,7 +51,7 @@ Ambil gambaran umumnya saja. **Hierarki di Figma tidak dipakai**: di Figma jam "
 17. ISPU `null`: kotak abu "Data tidak tersedia" dan penjelasan singkat. Bagian UV tetap tampil bila ada.
 
 ## Di luar scope
-- Geolokasi perangkat, lokasi di luar 12 kota mock.
+- Geolokasi perangkat, lokasi di luar 9 lokasi yang tersedia.
 - Grafik (ada di fitur `outlook`).
 
 ## Checklist IMK
@@ -71,11 +71,11 @@ Ambil gambaran umumnya saja. **Hierarki di Figma tidak dipakai**: di Figma jam "
 
 ## Kriteria selesai
 - [ ] Data cuaca dari Figma tidak muncul sama sekali.
-- [ ] Mencari "ban" menampilkan Bandung dan Serang (Banten). Memilihnya mengubah kartu utama, panel kanan, dan bagian bawah.
+- [ ] Mencari "ban" menampilkan Bandung dan Serang (Banten), mencari "bogor" menampilkan Jabodetabek. Memilihnya mengubah kartu utama, panel kanan, dan bagian bawah.
 - [ ] Setelah memilih lokasi, tombol **Back** browser kembali ke lokasi sebelumnya.
 - [ ] Tekan `/` → fokus pindah ke pencarian.
 - [ ] Combobox bisa dipakai penuh dengan keyboard dan diumumkan benar oleh pembaca layar.
-- [ ] Medan (PM2.5 null) tampil benar, dengan polutan dominan dari data yang ada.
+- [ ] Di mode `mock`, Medan (PM2.5 null) tampil benar, dengan polutan dominan dari data yang ada.
 - [ ] `?simulasi=kosong` → "Data tidak tersedia", tidak crash.
 - [ ] Dalam uji singkat ke 2 teman, pertanyaan "perlu masker hari ini?" terjawab ≤ 10 detik.
 - [ ] Semua baris di checklist IMK terpenuhi.

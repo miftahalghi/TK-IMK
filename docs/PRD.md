@@ -22,13 +22,14 @@
 | D1 | Tech stack: **React 18 + Vite**, CSS Modules + token CSS, tanpa UI framework | ✅ diterapkan |
 | D2 | Standar indeks: **ISPU** (PermenLHK P.14/2020), bukan US AQI | ✅ diterapkan |
 | D3 | Data cuaca di Figma (suhu, kelembapan, angin, "Cloudy") **dihapus** karena tidak ada datanya | ✅ diterapkan |
-| D4 | **Bentuk data asli kelompok:** format, frekuensi, daftar lokasi, ada prakiraan atau tidak | ⏳ **harus dijawab sebelum Fase 3** |
+| D4 | **Data asli:** rekaman **Open-Meteo** (model Copernicus CAMS) **1 Okt–1 Nov 2026**, per jam, 9 lokasi, disimpan di `src/shared/data/dataset/`. Dipakai lewat `VITE_DATA_SOURCE=dataset`; **default tetap `mock`**. "Sekarang" = 26 Okt 2026, 12.00 WIB. | ✅ diputuskan |
 | D5 | Autentikasi **mock**. Beranda, Peta, Tips terbuka untuk tamu; Pengaturan butuh login | ✅ diterapkan |
 | D6 | Bahasa UI: **Bahasa Indonesia** sehari-hari | ✅ diterapkan |
 | D7 | Kartu kosong kiri bawah Figma diisi **Rincian Polutan** | ✅ masuk fitur `insights` |
 | D8 | **Tanggal tenggat** tiap fase | ⏳ **harus diisi kelompok** |
 | D9 | Nama produk (Figma masih "Program") | ⏳ ganti `APP_NAME` di `src/app/config.js` |
 | D10 | Figma = sketsa kasar; website dan prinsip IMK yang menjadi acuan | ✅ diterapkan |
+| D11 | **Jakarta, Bogor, Depok, Bekasi digabung menjadi "Jabodetabek"** (id tetap `jakarta`) karena data Open-Meteo bernilai sama untuk keempatnya. Total 9 lokasi. | ✅ diterapkan |
 
 ---
 
@@ -113,7 +114,7 @@ Tanggal diisi kelompok (D8). H = hari kerja.
 | 0. Initiate | ✅ selesai | Kerangka, `@shared` (komponen + prinsip IMK), registry 7 fitur, CONTRACT, SPEC | Repo siap dibagikan | Koordinator |
 | 1. Riset ringan | H1–H5, **paralel dengan Fase 2** | Survei Google Form (±10 pertanyaan, 15–30 responden pekerja dan mahasiswa) | Ringkasan temuan; revisi proto-persona; daftar penyesuaian | 1–2 anggota |
 | 2. Bangun | H1–H7 | Setiap anggota mengerjakan fiturnya dengan mock data, mengikuti checklist IMK | 7 PR ke `main` | Semua |
-| 3. Data asli | H8 | `realAdapter` sesuai D4; fitur tidak perlu berubah | Situs memakai data kelompok | Koordinator |
+| 3. Data asli | ✅ selesai | Rekaman Open-Meteo 1 Okt–1 Nov 2026 + `datasetAdapter`; fitur tidak perlu berubah (D4) | Situs bisa memakai data asli lewat `.env` | Koordinator |
 | 4. Evaluasi heuristik | H8–H9 | Setiap anggota menilai 2 fitur milik anggota lain dengan 10 heuristik Nielsen, skala keparahan 0–4 | Daftar temuan berprioritas | Dipimpin Anggota 4 |
 | 5. Uji usability | H9–H10 | 5 peserta (pekerja/mahasiswa), skenario tugas + *think-aloud* + kuesioner SUS | Tingkat keberhasilan, waktu per tugas, skor SUS, kutipan peserta | 2 anggota (fasilitator + pencatat) |
 | 6. Iterasi | H10–H11 | Perbaiki temuan berkeparahan 3–4 dari Fase 4 dan 5 | Versi final + catatan "sebelum/sesudah" untuk laporan | Pemilik fitur |
@@ -124,13 +125,15 @@ Hasilnya dipakai untuk: memvalidasi proto-persona, mengurutkan prioritas isi kar
 
 ### 5.2 Skenario uji usability (Fase 5)
 
+Jalankan dengan **mode `dataset`** supaya angkanya asli dan sama untuk semua peserta. Kunci jawaban di bawah berlaku untuk "sekarang" default (26 Okt 2026, 12.00 WIB). Cek ulang di situs sebelum uji.
+
 | Kode | Tugas untuk peserta | Berhasil jika | Mengukur |
 |---|---|---|---|
-| T1 | "Kamu akan berangkat ke kantor/kampus di Jakarta. Perlu pakai masker hari ini?" | Menjawab sesuai kategori, ≤ 10 detik | G1 |
-| T2 | "Kamu ingin lari sore di Depok. Jam berapa waktu terbaik?" | Menyebut jam yang ditandai "Terbaik" | G4 |
-| T3 | "Mana yang udaranya lebih baik sekarang, Bandung atau Bekasi?" | Jawaban benar | G3 |
+| T1 | "Kamu akan berangkat ke kantor/kampus di Jabodetabek. Perlu pakai masker hari ini?" | Menjawab "perlu" (Tidak Sehat), ≤ 10 detik | G1 |
+| T2 | "Kamu ingin lari sore di Bandung. Jam berapa waktu terbaik?" | Menyebut jam yang ditandai "Terbaik" | G4 |
+| T3 | "Mana yang udaranya lebih baik sekarang, Bandung atau Denpasar?" | Denpasar | G3 |
 | T4 | "Apa arti PM2.5, dan berapa nilainya di lokasi ini?" | Menemukan penjelasan dan nilainya | G2 |
-| T5 | (Setelah masuk) "Simpan Depok sebagai lokasi 'Kampus', lalu hapus lagi." | Berhasil menyimpan dan menghapus | N3/S6, N5 |
+| T5 | (Setelah masuk) "Simpan Yogyakarta sebagai lokasi 'Kampus', lalu hapus lagi." | Berhasil menyimpan dan menghapus | N3/S6, N5 |
 
 Catat per tugas: berhasil/gagal, waktu, jumlah salah klik, dan ucapan peserta. Setelah semua tugas, peserta mengisi **SUS** (10 pertanyaan, skala 1–5). Gunakan terjemahan Bahasa Indonesia yang sudah divalidasi (Sharfina & Santoso, 2016).
 
@@ -231,11 +234,11 @@ Figma adalah sketsa kasar. Perbedaan berikut disengaja, beserta prinsip yang men
 | 1 | Data cuaca mendominasi (suhu, "Cloudy", kelembapan, angin) | Dihapus; ISPU dan tindakan yang utama | N8 |
 | 2 | Jam "12.00" 64 px lebih menonjol daripada ISPU | ISPU dan tindakan paling menonjol; jam kecil | N8 |
 | 3 | "AQI" + "PM2.5" tanpa keterangan | "ISPU" + "Polutan dominan: PM2.5 (Partikulat halus)" + InfoTip | N2, N10 |
-| 4 | "Jakarta, West Java" | "Jakarta, DKI Jakarta" | N2 |
+| 4 | "Jakarta, West Java" | "Jabodetabek, DKI Jakarta, Jawa Barat, Banten" (D11) | N2 |
 | 5 | Kartu kiri bawah kosong | Rincian Polutan | — |
 | 6 | Semua baris harian "Tomorrow, 23 Oct" | Hari dan tanggal berurutan | N2 |
 | 7 | Bahasa campur Indonesia dan Inggris | Bahasa Indonesia | N4 |
-| 8 | Daftar daerah campur kota dan provinsi | Kota saja | N4 |
+| 8 | Daftar daerah campur kota dan provinsi | Kota, dengan Jakarta–Bogor–Depok–Bekasi digabung menjadi Jabodetabek (D11) | N4 |
 | 9 | Warna pill daerah tidak konsisten | Warna kategori dari token + label teks + legenda | N4, N6, S2 |
 | 10 | Panel kanan melebihi frame | Muat di kolom 300 px | N8 |
 | 11 | Sidebar "Program", "Dashboard" | Nama produk (D9), "Beranda" | N4 |
@@ -243,11 +246,12 @@ Figma adalah sketsa kasar. Perbedaan berikut disengaja, beserta prinsip yang men
 ## 10. Tugas koordinator
 
 - [ ] Cocokkan `BREAKPOINTS` di `src/shared/aqi.js` dengan lampiran resmi PermenLHK P.14/2020.
-- [ ] Isi D4, D8, D9.
+- [ ] Isi D8, D9.
 - [ ] Tentukan penanggung jawab survei (Fase 1) dan uji usability (Fase 5).
 - [ ] Buat repo GitHub, push, aktifkan *branch protection* di `main` (PR wajib, minimal 1 review).
 - [ ] Bagikan ke setiap anggota: link repo + nama foldernya.
 - [ ] Review setiap PR: jalankan `npm run check:scope -- <id>` dan `npm run verify`, lalu cek tabel "Prinsip IMK yang diterapkan".
 - [ ] Tampung usulan perubahan `@shared` dari PR anggota, lalu terapkan.
-- [ ] Fase 3: buat `src/shared/data/realAdapter.js` dengan fungsi yang sama seperti `mockAdapter.js`.
+- [x] Fase 3: data asli Open-Meteo (`datasetAdapter` + `npm run fetch:dataset`).
+- [ ] Putuskan kapan default diganti dari `mock` ke `dataset` (disarankan setelah semua fitur selesai, sebelum uji usability).
 - [ ] Kumpulkan tabel IMK dari semua PR ke §6 untuk laporan akhir.

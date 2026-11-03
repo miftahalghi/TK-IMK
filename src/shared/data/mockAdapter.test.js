@@ -7,11 +7,12 @@ const NOW = Date.parse("2026-10-22T05:30:00Z");
 const adapter = createMockAdapter({ now: () => NOW, latency: [0, 0] });
 
 describe("mockAdapter", () => {
-  it("mengembalikan 12 lokasi tanpa field internal", async () => {
+  it("mengembalikan 9 lokasi tanpa field internal", async () => {
     const locations = await adapter.getLocations();
-    expect(locations).toHaveLength(12);
+    expect(locations).toHaveLength(9);
     for (const loc of locations) {
-      expect(Object.keys(loc).sort()).toEqual(["id", "lat", "lon", "name", "region"]);
+      expect(Object.keys(loc)).not.toContain("profile");
+      for (const key of ["id", "lat", "lon", "name", "region"]) expect(loc).toHaveProperty(key);
     }
   });
 

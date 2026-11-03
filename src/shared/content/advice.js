@@ -95,6 +95,8 @@ export const SOURCES = [
   { label: "PermenLHK No. P.14/2020 tentang Indeks Standar Pencemar Udara", url: "https://jdih.menlhk.go.id/" },
   { label: "WHO: Ultraviolet (UV) index", url: "https://www.who.int/news-room/questions-and-answers/item/radiation-the-ultraviolet-(uv)-index" },
   { label: "WHO Global Air Quality Guidelines (2021)", url: "https://www.who.int/publications/i/item/9789240034228" },
+  { label: "Data: Open-Meteo Air Quality API (CC BY 4.0)", url: "https://open-meteo.com/en/docs/air-quality-api" },
+  { label: "Model: Copernicus Atmosphere Monitoring Service (CAMS)", url: "https://atmosphere.copernicus.eu/" },
 ];
 
 /**
@@ -133,6 +135,11 @@ export const GLOSSARY = {
   "data-simulasi": {
     term: "Data simulasi",
     short: "Angka di situs ini masih data contoh untuk pengembangan, belum hasil pengukuran asli.",
+  },
+  "sumber-data": {
+    term: "Sumber data",
+    short:
+      "Data berasal dari Open-Meteo (model Copernicus CAMS), rekaman 1 Oktober–1 November 2026. Ini perkiraan model, bukan alat ukur di kota. Satu nilai mewakili wilayah sekitar puluhan kilometer, jadi Jakarta, Bogor, Depok, dan Bekasi digabung menjadi Jabodetabek.",
   },
   pm25: { term: "PM2.5", short: PARAMETER_INFO.pm25.what },
   pm10: { term: "PM10", short: PARAMETER_INFO.pm10.what },

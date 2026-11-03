@@ -70,7 +70,7 @@ Belum ada desain di Figma, dan **tidak perlu dibuat**. Pakai pola halaman bersam
 - [ ] Batas 5 lokasi tersimpan dan validasi label berjalan.
 - [ ] Hapus lokasi → "Urungkan" mengembalikannya ke posisi yang sama.
 - [ ] Reset hanya terjadi setelah konfirmasi di `ConfirmDialog`.
-- [ ] Banner muncul di Beranda saat ISPU ≥ ambang (uji dengan Bekasi atau Pekanbaru) dan hilang saat ambang "Mati".
+- [ ] Banner muncul di Beranda saat ISPU ≥ ambang (uji di mode `mock` dengan Serang atau Pekanbaru) dan hilang saat ambang "Mati".
 - [ ] Semua baris di checklist IMK terpenuhi.
 - [ ] Rapi di 390 px dan 1440 px, terang dan gelap.
 - [ ] Checklist Definition of Done di `CONTRACT.md` §9.
