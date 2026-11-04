@@ -1,10 +1,571 @@
 .page {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: var(--space-5);
   max-width: var(--content-max);
+  min-width: 0;
 }
 
-.check {
+.legendBar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  min-width: 0;
+}
+
+.legendHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+}
+
+.legendTitleGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
   font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+}
+
+.legendHint {
+  font-size: var(--fs-xs);
   color: var(--color-text-muted);
+}
+
+.uvLegend {
+  list-style: none;
+  margin: 0;
+  padding: var(--space-2) 0 0;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  font-size: var(--fs-xs);
+}
+
+.uvLegendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.uvLegendItemActive {
+  outline: 2px solid var(--color-text);
+  font-weight: var(--fw-semibold);
+}
+
+.uvSwatch {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+}
+
+.uvRange {
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Tata letak utama:
+ * Di layar sempit (< 960px), daftar lokasi berada di atas peta (urutan DOM).
+ * Di layar lebar (>= 960px), peta di kiri dan daftar lokasi di kanan.
+ */
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+  min-width: 0;
+}
+
+.listColumn {
+  min-width: 0;
+}
+
+.mapColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+@media (min-width: 960px) {
+  .workspace {
+    grid-template-columns: minmax(0, 1fr) 360px;
+    grid-template-areas: "map list";
+  }
+
+  .mapColumn {
+    grid-area: map;
+  }
+
+  .listColumn {
+    grid-area: list;
+  }
+}
+
+/* ───────── Kartu Peta ───────── */
+.mapCard {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.mapCardHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.mapCardTitle {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+}
+
+.mapCardMeta {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.mapContainerWrap {
+  position: relative;
+  width: 100%;
+  height: min(70vh, 540px);
+  min-height: 340px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface-soft);
+  isolation: isolate;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  font-family: var(--font-sans);
+  background: var(--color-surface-soft);
+}
+
+/* Gaya kontrol bawaan Leaflet agar konsisten dan terbaca di mode terang maupun gelap (S1, S2) */
+.mapContainerWrap :global(.leaflet-control-attribution) {
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  border-top: 1px solid var(--color-border);
+  border-left: 1px solid var(--color-border);
+  padding: 2px var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+}
+
+.mapContainerWrap :global(.leaflet-control-attribution a) {
+  color: var(--color-accent);
+  font-weight: var(--fw-medium);
+}
+
+.mapContainerWrap :global(.leaflet-bar) {
+  border: 1px solid var(--color-border-strong);
+  box-shadow: var(--shadow-pop);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.mapContainerWrap :global(.leaflet-bar a) {
+  background: var(--color-bg);
+  color: var(--color-text);
+  border-bottom-color: var(--color-border);
+}
+
+.mapContainerWrap :global(.leaflet-bar a:hover),
+.mapContainerWrap :global(.leaflet-bar a:focus-visible) {
+  background: var(--color-surface-soft);
+  color: var(--color-text);
+}
+
+.mapContainerWrap :global(.leaflet-tooltip) {
+  background: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-pop);
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  padding: var(--space-1) var(--space-2);
+}
+
+.mapContainerWrap :global(.leaflet-tooltip-top::before) {
+  border-top-color: var(--color-border-strong);
+}
+
+.mapFooter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* ───────── Marker Leaflet (L.divIcon) ───────── */
+.leafletMarkerWrapper {
+  background: transparent;
+  border: 0;
+}
+
+.markerBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--color-bg);
+  box-shadow: var(--shadow-pop);
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  transition: transform var(--duration);
+}
+
+.markerBadgeActive {
+  border-width: 3px;
+  border-color: var(--color-bg);
+  outline: 2px solid var(--color-accent);
+}
+
+.markerBadgeSelected {
+  border-width: 3px;
+  border-color: var(--color-bg);
+  outline: 3px solid var(--color-text);
+  transform: scale(1.14);
+}
+
+.markerNumber {
+  pointer-events: none;
+}
+
+/* ───────── Daftar Lokasi ───────── */
+.locationList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.locationItem {
+  margin: 0;
+}
+
+.locationButton {
+  width: 100%;
+  min-height: 52px;
+  padding: var(--space-3) var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-bg);
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  text-align: left;
+  transition:
+    background var(--duration),
+    border-color var(--duration);
+}
+
+.locationButton:hover {
+  background: var(--color-surface-soft);
+}
+
+.locationButtonSelected {
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent);
+  border-width: 2px;
+}
+
+.locationInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.locationNameRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.locationName {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+}
+
+.activeTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-mint);
+  color: var(--color-text);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+}
+
+.locationSub {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.locationPillWrap {
+  flex: none;
+}
+
+/* ───────── Panel Detail Lokasi ───────── */
+.detailBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.detailTopRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+}
+
+.detailPrimary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  flex: 1;
+}
+
+.detailMetricRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.detailLabelWithTip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+}
+
+.detailSummary {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-medium);
+}
+
+.detailCoverage {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.detailMetaGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-3);
+}
+
+.detailMetaItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+}
+
+.detailMetaValue {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+}
+
+.pollutantSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.pollutantHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.pollutantHeading {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+}
+
+.pollutantUnitHint {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.pollutantGrid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-3);
+}
+
+.pollutantCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+}
+
+.pollutantCardDominant {
+  border-color: var(--color-accent);
+  border-width: 2px;
+}
+
+.pollutantCardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.pollutantTitleWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.pollutantCode {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+.pollutantFullName {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.pollutantValues {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.pollutantConc {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.detailActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+.detailActionHint {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.closedPanelBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  font-size: var(--fs-sm);
+}
+
+/* ───────── Skeleton State ───────── */
+.skeletonMap {
+  width: 100%;
+  height: min(70vh, 540px);
+  min-height: 340px;
+}
+
+.skeletonList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+@media (max-width: 600px) {
+  .mapCard {
+    padding: var(--space-3);
+  }
+
+  .mapContainerWrap {
+    height: 360px;
+    min-height: 300px;
+  }
+
+  .pollutantGrid {
+    grid-template-columns: 1fr;
+  }
 }

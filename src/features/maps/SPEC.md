@@ -57,16 +57,16 @@ Belum ada desain di Figma, dan **tidak perlu dibuat**. Pakai pola halaman bersam
 | S4 | "Lihat di Beranda" menutup alur dengan jelas (pindah ke Beranda dengan lokasi itu) |
 
 ## Kriteria selesai
-- [ ] 9 marker tampil dengan warna dan angka ISPU yang benar (bandingkan dengan `assess`). Marker Jabodetabek mewakili satu wilayah, jadi boleh diberi keterangan "mencakup Jakarta, Bogor, Depok, Bekasi".
-- [ ] Di mode `mock`, Medan (data bolong) tetap tampil dengan benar.
-- [ ] "Lihat di Beranda" membuka `/` dengan lokasi itu aktif, dan Back kembali ke Peta.
-- [ ] Legenda dan atribusi OSM terlihat.
-- [ ] Semua lokasi bisa dipilih dengan keyboard lewat daftar.
-- [ ] Di 390 px: daftar dan peta bertumpuk, tidak ada scroll horizontal.
-- [ ] Hasil `npm run build` menunjukkan Leaflet hanya ada di chunk `MapsPage`.
-- [ ] Semua baris di checklist IMK terpenuhi.
-- [ ] Rapi di terang dan gelap.
-- [ ] Checklist Definition of Done di `CONTRACT.md` §9.
+- [x] 9 marker tampil dengan warna dan angka ISPU yang benar (bandingkan dengan `assess`). Marker Jabodetabek mewakili satu wilayah, jadi boleh diberi keterangan "mencakup Jakarta, Bogor, Depok, Bekasi".
+- [x] Di mode `mock`, Medan (data bolong) tetap tampil dengan benar.
+- [x] "Lihat di Beranda" membuka `/` dengan lokasi itu aktif, dan Back kembali ke Peta.
+- [x] Legenda dan atribusi OSM terlihat.
+- [x] Semua lokasi bisa dipilih dengan keyboard lewat daftar.
+- [x] Di 390 px: daftar dan peta bertumpuk, tidak ada scroll horizontal.
+- [x] Hasil `npm run build` menunjukkan Leaflet hanya ada di chunk `MapsPage`.
+- [x] Semua baris di checklist IMK terpenuhi.
+- [x] Rapi di terang dan gelap.
+- [x] Checklist Definition of Done di `CONTRACT.md` §9.
 
 ## Prompt awal untuk AI agent
 ```
